@@ -33,7 +33,7 @@ function usage {
 	echo "Usage: $(basename $0) <filename> [<filename> [...]]" >&2
 	echo "Upload images to imgur and output their new URLs to stdout. Each one's" >&2
 	echo "delete page is output to stderr between the view URLs." >&2
-	echo "If xsel or xclip is available, the URLs are put on the X selection for" >&2
+	echo "If xsel, xclip, or pbcopy is available, the URLs are put on the paste buffer for" >&2
 	echo "easy pasting." >&2
 }
 
@@ -101,11 +101,12 @@ while [ $# -gt 0 ]; do
 "
 done
 
-# put the URLs on the clipboard if we have xsel or xclip
+# put the URLs on the clipboard if we have pbcopy (OS X), xsel or xclip
 if [ $DISPLAY ]; then
 	{ type xsel >/dev/null 2>/dev/null && echo -n $clip | xsel; } \
 		|| { type xclip >/dev/null 2>/dev/null && echo -n $clip | xclip; } \
-		|| echo "Haven't copied to the clipboard: no xsel or xclip" >&2
+		|| { type pbcopy >/dev/null 2>/dev/null && echo -n $clip | pbcopy; } \
+		|| echo "Haven't copied to the clipboard: no xsel, xclip, or pbcopy" >&2
 else
 	echo "Haven't copied to the clipboard: no \$DISPLAY" >&2
 fi
