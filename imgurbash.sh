@@ -92,7 +92,11 @@ while [ $# -gt 0 ]; do
 
 	# parse the response and output our stuff
 	url=$(echo $response | sed -r 's/.*<original_image>(.*)<\/original_image>.*/\1/')
+	# added https
+	url=$(echo $url | sed -r 's/http/https/')
 	deleteurl=$(echo $response | sed -r 's/.*<delete_page>(.*)<\/delete_page>.*/\1/')
+	# added https
+	deleteurl=$(echo $deleteurl | sed -r 's/http/https/')
 	echo $url
 	echo "Delete page: $deleteurl" >&2
 
